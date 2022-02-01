@@ -48,7 +48,9 @@ export class VideoService {
     }
 
     async findOne(id: string): Promise<Video> {
-        const video = await this.videoRepository.findOne(id);
+        const video = await this.videoRepository.findOne(id, {
+            cache: true,
+        });
 
         if ( video === undefined ) {
             throw new NotFoundException("Video not found");
