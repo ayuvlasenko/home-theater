@@ -1,8 +1,9 @@
-import { createReadStream, ReadStream } from "fs";
+import { createReadStream, ReadStream, Stats } from "fs";
 import { stat } from "fs/promises";
 import { resolve } from "path";
-import { Injectable } from "@nestjs/common";
+import { CACHE_MANAGER, Inject, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { Cache } from "cache-manager";
 
 interface FileStats {
     size: number;
@@ -18,7 +19,9 @@ export class FileService {
     private readonly filesDirectory: string;
 
     constructor(
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService,
+        @Inject(CACHE_MANAGER)
+        private readonly cacheManager: Cache
     ) {
         this.filesDirectory = this.configService.get("FILES_DIRECTORY") as string;
     }
@@ -28,7 +31,13 @@ export class FileService {
     }
 
     async stat(name: string): Promise<FileStats> {
-        const stats = await stat(this.path(name));
+        const path = this.path(name);
+
+        const stats = await this.cacheManager.get<Stats>(path)
+            ?? await stat(path);
+
+        await this.cacheManager.set(path, stats);
+
         return { size: stats.size };
     }
 

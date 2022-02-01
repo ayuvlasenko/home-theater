@@ -1,9 +1,12 @@
-import { Module } from "@nestjs/common";
+import { CacheModule, Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { FileService } from "./file.service";
 
 @Module({
-    imports: [ConfigModule],
+    imports: [
+        CacheModule.register(),
+        ConfigModule,
+    ],
     providers: [FileService],
     exports: [FileService],
 })
