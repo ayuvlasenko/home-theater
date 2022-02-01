@@ -1,5 +1,6 @@
 import { ReadStream } from "fs";
 import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Video } from "./video.entity";
@@ -19,21 +20,23 @@ export interface StreamRange {
 
 @Injectable()
 export class VideoService {
+    private readonly maxChunkBytes: number;
+
     constructor(
         private readonly fileService: FileService,
+        private readonly configService: ConfigService,
         @InjectRepository(Video)
         private readonly videoRepository: Repository<Video>
-    ) {}
+    ) {
+        this.maxChunkBytes = this.configService.get("MAX_VIDEO_CHUNK_BYTES") ?? 500000;
+    }
 
     async stream(id: string, httpRange: HttpRange): Promise<VideoStream> {
         const video = await this.findOne(id);
 
         const { size } = await this.fileService.stat(video.file);
 
-        const streamRange: StreamRange = {
-            start: httpRange.start,
-            end: httpRange.end ?? size - 1,
-        };
+        const streamRange = this.calculateStreamRange(size, httpRange);
 
         const readStream = this.fileService.createReadStream(
             video.file,
@@ -57,5 +60,23 @@ export class VideoService {
         }
 
         return video;
+    }
+
+    private calculateStreamRange(size: number, httpRange: HttpRange): StreamRange {
+        const lastByte = size - 1;
+
+        const start = httpRange.start >= lastByte
+            ? lastByte
+            : httpRange.start;
+
+        const chunkSize = Math.min(
+            this.maxChunkBytes,
+            lastByte - start,
+            (httpRange.end ?? lastByte) - start
+        );
+
+        const end = start + chunkSize;
+
+        return { start, end };
     }
 }
