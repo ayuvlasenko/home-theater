@@ -1,3 +1,7 @@
+// express import is used as type
+// eslint-disable-next-line node/no-extraneous-import
+import { Response } from "express";
+import { FileInterceptor } from "@nestjs/platform-express";
 import {
     Controller,
     Get,
@@ -6,10 +10,12 @@ import {
     Headers,
     HttpStatus,
     StreamableFile,
+    Post,
+    UseInterceptors,
+    UploadedFile,
+    Body,
+    ClassSerializerInterceptor,
 } from "@nestjs/common";
-// express import is used as type
-// eslint-disable-next-line node/no-extraneous-import
-import { Response } from "express";
 import {
     HttpRange,
     parseRangeHeader,
@@ -18,15 +24,18 @@ import {
     RangeNotSatisfiableException,
 } from "../common/controller/range-not-satisfiable.exception";
 import { VideoService } from "./video.service";
+import { UploadVideoDto } from "./dto/upload-video.dto";
+import { Video } from "./video.entity";
 
 @Controller("videos")
+@UseInterceptors(ClassSerializerInterceptor)
 export class VideoController {
     constructor(
         private readonly videoService: VideoService
     ) {}
 
     @Get(":id")
-    async get(
+    async findOne(
         @Param("id") id: string,
         @Res({ passthrough: true }) res: Response,
         @Headers("range") range?: string
@@ -53,5 +62,28 @@ export class VideoController {
         res.setHeader("Content-Type", "video/mp4");
 
         return new StreamableFile(stream.readStream);
+    }
+
+    @Get()
+    async findAll(): Promise<Video[]> {
+        // todo: pagination
+        return await this.videoService.findAll();
+    }
+
+    @Post()
+    @UseInterceptors(FileInterceptor("file"))
+    async upload(
+        @UploadedFile() file: Express.Multer.File,
+        @Body() body: UploadVideoDto
+    ): Promise<Video> {
+        // todo: validate file
+        // todo: delete file on exception
+        return await this.videoService.create({
+            name: body.name,
+            file: {
+                name: file.filename,
+                originalName: file.originalname,
+            },
+        });
     }
 }

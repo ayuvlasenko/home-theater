@@ -6,6 +6,7 @@ import { Repository } from "typeorm";
 import { Video } from "./video.entity";
 import { HttpRange } from "../common/controller/parse-range-header";
 import { FileService } from "../file/file.service";
+import { CreateVideoDto } from "./dto/create-video.dto";
 
 export interface VideoStream {
     readStream: ReadStream;
@@ -29,6 +30,24 @@ export class VideoService {
         private readonly videoRepository: Repository<Video>
     ) {
         this.maxChunkBytes = this.configService.get("MAX_VIDEO_CHUNK_BYTES") ?? 500000;
+    }
+
+    async create(createVideoDto: CreateVideoDto): Promise<Video> {
+        const file = await this.fileService.create(createVideoDto.file);
+
+        const video = this.videoRepository.create({
+            name: createVideoDto.name,
+            file,
+        });
+        await this.videoRepository.save(video);
+
+        return video;
+    }
+
+    async findAll(): Promise<Video[]> {
+        return await this.videoRepository.find({
+            relations: ["file"],
+        });
     }
 
     async stream(id: string, httpRange: HttpRange): Promise<VideoStream> {
