@@ -1,32 +1,21 @@
 import {
     Column,
-    CreateDateColumn,
     Entity,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn,
+    ManyToOne,
 } from "typeorm";
+import { Exclude } from "class-transformer";
+import { Base } from "../common/entity/base.entity";
+import { File } from "../file/file.entity";
 
 @Entity()
-export class Video {
-    @PrimaryGeneratedColumn("uuid")
-    id!: string;
-
+export class Video extends Base {
     @Column({
         type: "text",
         nullable: true,
     })
     name?: string | null;
 
-    @Column("text")
-    file!: string;
-
-    @CreateDateColumn({
-        type: "timestamp",
-    })
-    createdAt!: Date;
-
-    @UpdateDateColumn({
-        type: "timestamp",
-    })
-    updatedAt!: Date;
+    @Exclude()
+    @ManyToOne(() => File)
+    file!: File;
 }

@@ -52,6 +52,7 @@ export class VideoService {
 
     async findOne(id: string): Promise<Video> {
         const video = await this.videoRepository.findOne(id, {
+            relations: ["file"],
             cache: true,
         });
 

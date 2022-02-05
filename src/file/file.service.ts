@@ -3,7 +3,11 @@ import { stat } from "fs/promises";
 import { resolve } from "path";
 import { CACHE_MANAGER, Inject, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 import { Cache } from "cache-manager";
+import { CreateFileDto } from "./dto/create-file.dto";
+import { File } from "./file.entity";
 
 interface FileStats {
     size: number;
@@ -20,18 +24,28 @@ export class FileService {
 
     constructor(
         private readonly configService: ConfigService,
+        @InjectRepository(File)
+        private readonly fileRepository: Repository<File>,
         @Inject(CACHE_MANAGER)
         private readonly cacheManager: Cache
     ) {
         this.filesDirectory = this.configService.get("FILES_DIRECTORY") as string;
     }
 
-    createReadStream(name: string, options?: ReadStreamOptions): ReadStream {
-        return createReadStream(this.path(name), options);
+    async create(createFileDto: CreateFileDto): Promise<File> {
+        const file = this.fileRepository.create(createFileDto);
+
+        await this.fileRepository.save(file);
+
+        return file;
     }
 
-    async stat(name: string): Promise<FileStats> {
-        const path = this.path(name);
+    createReadStream(file: File, options?: ReadStreamOptions): ReadStream {
+        return createReadStream(this.path(file.name), options);
+    }
+
+    async stat(file: File): Promise<FileStats> {
+        const path = this.path(file.name);
 
         const stats = await this.cacheManager.get<Stats>(path)
             ?? await stat(path);
