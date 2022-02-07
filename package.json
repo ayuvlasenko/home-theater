@@ -5,70 +5,20 @@
   "author": "ayuvlasenko",
   "private": true,
   "license": "MIT",
-  "engines": {
-    "node": "16.x"
-  },
   "scripts": {
-    "prebuild": "rimraf dist",
-    "build": "npx nest build",
-    "start": "npx nest start",
-    "start:dev": "npx nest start --watch",
-    "start:debug": "npx nest start --debug --watch",
-    "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,e2e}/**/*.ts\" --fix",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
-    "migration:create": "npm run typeorm migration:create -- -n",
-    "migration:generate": "npm run typeorm migration:generate -- -n",
-    "migration:run": "npm run typeorm migration:run",
-    "migration:revert": "npm run typeorm migration:revert"
+    "build": "rimraf dist && npm run build --workspaces",
+    "server:watch": "npm run start:watch -w apps/server",
+    "react-client:watch": "npm run start -w apps/react-client",
+    "migration:create": "npm run migration:create -w apps/server",
+    "migration:generate": "npm run migration:generate -w apps/server",
+    "migration:run": "npm run migration:run -w apps/server",
+    "migration:revert": "npm run migration:revert -w apps/server"
   },
   "dependencies": {
-    "@nestjs/common": "^8.2.6",
-    "@nestjs/config": "^1.1.6",
-    "@nestjs/core": "^8.2.6",
-    "@nestjs/mapped-types": "^1.0.1",
-    "@nestjs/platform-express": "^8.2.6",
-    "@nestjs/typeorm": "^8.0.3",
-    "cache-manager": "^3.6.0",
-    "class-transformer": "^0.5.1",
-    "class-validator": "^0.13.2",
-    "multer": "^1.4.4",
-    "pg": "^8.7.1",
-    "reflect-metadata": "^0.1.13",
-    "rimraf": "^3.0.2",
-    "rxjs": "^7.5.2",
-    "typeorm": "^0.2.41",
-    "uuid": "^8.3.2"
+    "rimraf": "^3.0.2"
   },
-  "devDependencies": {
-    "@nestjs/cli": "^8.2.0",
-    "@nestjs/schematics": "^8.0.5",
-    "@nestjs/testing": "^8.2.6",
-    "@types/cache-manager": "^3.4.2",
-    "@types/express": "^4.17.13",
-    "@types/jest": "27.4.0",
-    "@types/multer": "^1.4.7",
-    "@types/node": "^17.0.12",
-    "@types/pg": "^8.6.4",
-    "@types/uuid": "^8.3.4",
-    "@typescript-eslint/eslint-plugin": "^5.10.1",
-    "@typescript-eslint/parser": "^5.10.1",
-    "eslint": "^8.7.0",
-    "eslint-plugin-jest": "^26.0.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-sonarjs": "^0.11.0",
-    "jest": "^27.4.7",
-    "prettier": "^2.5.1",
-    "source-map-support": "^0.5.21",
-    "ts-jest": "^27.1.3",
-    "ts-loader": "^9.2.6",
-    "ts-node": "^10.4.0",
-    "tsconfig-paths": "^3.12.0",
-    "typescript": "^4.5.5"
-  }
+  "workspaces": [
+    "apps/server",
+    "apps/react-client"
+  ]
 }
