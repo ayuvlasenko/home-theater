@@ -34,8 +34,8 @@ export class VideoController {
         private readonly videoService: VideoService
     ) {}
 
-    @Get(":id")
-    async findOne(
+    @Get(":id/stream")
+    async stream(
         @Param("id") id: string,
         @Res({ passthrough: true }) res: Response,
         @Headers("range") range?: string
