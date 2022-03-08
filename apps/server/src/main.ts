@@ -6,11 +6,11 @@ import { AppModule } from "./app.module";
 async function bootstrap(): Promise<void> {
     const app = await NestFactory.create(AppModule);
 
-    // todo: serve react client
-
     app.useGlobalPipes(new ValidationPipe({
         transform: true,
     }));
+
+    app.setGlobalPrefix("api");
 
     const configService = app.get(ConfigService);
     const port = configService.get<number | undefined>("APP_PORT") ?? 8080;
