@@ -26,6 +26,7 @@ import {
 import { VideoService } from "./video.service";
 import { UploadVideoDto } from "./dto/upload-video.dto";
 import { Video } from "./video.entity";
+import { Public } from "../auth/decorator/public.decorator";
 
 @Controller("videos")
 @UseInterceptors(ClassSerializerInterceptor)
@@ -35,6 +36,7 @@ export class VideoController {
     ) {}
 
     @Get(":id/stream")
+    @Public()
     async stream(
         @Param("id") id: string,
         @Res({ passthrough: true }) res: Response,
