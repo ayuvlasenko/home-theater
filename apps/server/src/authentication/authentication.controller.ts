@@ -18,7 +18,7 @@ import { Public } from "./decorator/public.decorator";
 import { LocalGuard } from "./local/local.guard";
 import { RegisterUserDto } from "./dto/register-user.dto";
 
-@Controller("auth")
+@Controller("authentication")
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthenticationController {
     constructor(
