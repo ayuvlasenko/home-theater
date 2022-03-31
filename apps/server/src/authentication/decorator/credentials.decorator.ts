@@ -3,13 +3,13 @@ import { createParamDecorator, ExecutionContext } from "@nestjs/common";
 // eslint-disable-next-line node/no-extraneous-import
 import { Request } from "express";
 
-interface LocalRequest extends Request {
+interface RequestWithCredentials extends Request {
     credentials?: { [property: string]: unknown };
 }
 
 export const Credentials = createParamDecorator(
     (property: string | undefined, ctx: ExecutionContext) => {
-        const { credentials } = ctx.switchToHttp().getRequest<LocalRequest>();
+        const { credentials } = ctx.switchToHttp().getRequest<RequestWithCredentials>();
 
         if ( credentials === undefined ) {
             return;

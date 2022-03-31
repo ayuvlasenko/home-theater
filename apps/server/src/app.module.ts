@@ -1,13 +1,14 @@
 import { join } from "path";
-import { APP_GUARD } from "@nestjs/core";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { TypeOrmConfigService } from "./config/type-orm-config.service";
-import { VideoModule } from "./video/video.module";
-import { AuthModule } from "./auth/auth.module";
-import { JwtGuard } from "./auth/strategy/jwt.guard";
 import { ServeStaticModule } from "@nestjs/serve-static";
+import { VideoModule } from "./video/video.module";
+import { AuthenticationModule } from "./authentication/authentication.module";
+import { APP_GUARD } from "@nestjs/core";
+import { JwtGuard } from "./authentication/jwt/jwt.guard";
+import { CookieModule } from "./cookie/cookie.module";
 
 @Module({
     imports: [
@@ -21,7 +22,8 @@ import { ServeStaticModule } from "@nestjs/serve-static";
             exclude: ["/api*"],
         }),
         VideoModule,
-        AuthModule,
+        AuthenticationModule,
+        CookieModule,
     ],
     providers: [
         {

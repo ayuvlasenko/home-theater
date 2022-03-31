@@ -26,7 +26,7 @@ import {
 import { VideoService } from "./video.service";
 import { UploadVideoDto } from "./dto/upload-video.dto";
 import { Video } from "./video.entity";
-import { Public } from "../auth/decorator/public.decorator";
+import { Public } from "../authentication/decorator/public.decorator";
 
 @Controller("videos")
 @UseInterceptors(ClassSerializerInterceptor)
@@ -39,7 +39,7 @@ export class VideoController {
     @Public()
     async stream(
         @Param("id") id: string,
-        @Res({ passthrough: true }) res: Response,
+        @Res({ passthrough: true }) response: Response,
         @Headers("range") range?: string
     ): Promise<StreamableFile> {
         const httpRanges = parseRangeHeader(range);
@@ -57,11 +57,11 @@ export class VideoController {
         const contentRange = `bytes ${start}-${end}/${stream.size}`;
         const contentLength = end - start + 1;
 
-        res.status(HttpStatus.PARTIAL_CONTENT);
-        res.setHeader("Content-Range", contentRange);
-        res.setHeader("Accept-Ranges", "bytes");
-        res.setHeader("Content-Length", contentLength);
-        res.setHeader("Content-Type", "video/mp4");
+        response.status(HttpStatus.PARTIAL_CONTENT);
+        response.setHeader("Content-Range", contentRange);
+        response.setHeader("Accept-Ranges", "bytes");
+        response.setHeader("Content-Length", contentLength);
+        response.setHeader("Content-Type", "video/mp4");
 
         return new StreamableFile(stream.readStream);
     }
