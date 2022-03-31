@@ -19,10 +19,10 @@ import {
 import {
     HttpRange,
     parseRangeHeader,
-} from "../common/controller/parse-range-header";
+} from "../common/http-header/parse-range-header";
 import {
     RangeNotSatisfiableException,
-} from "../common/controller/range-not-satisfiable.exception";
+} from "../common/http-header/range-not-satisfiable.exception";
 import { VideoService } from "./video.service";
 import { UploadVideoDto } from "./dto/upload-video.dto";
 import { Video } from "./video.entity";

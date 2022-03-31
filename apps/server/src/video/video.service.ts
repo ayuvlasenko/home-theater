@@ -4,7 +4,7 @@ import { ConfigService } from "@nestjs/config";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Video } from "./video.entity";
-import { HttpRange } from "../common/controller/parse-range-header";
+import { HttpRange } from "../common/http-header/parse-range-header";
 import { FileService } from "../file/file.service";
 import { CreateVideoDto } from "./dto/create-video.dto";
 
