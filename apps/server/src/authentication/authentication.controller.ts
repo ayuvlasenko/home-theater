@@ -7,7 +7,6 @@ import {
     UseGuards,
     UseInterceptors,
 } from "@nestjs/common";
-// eslint-disable-next-line node/no-extraneous-import
 import { Response } from "express";
 import { AuthenticationService, AuthenticationTokens } from "./authentication.service";
 import { CookieService } from "../cookie/cookie.service";

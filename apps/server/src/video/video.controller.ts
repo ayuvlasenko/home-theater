@@ -1,5 +1,3 @@
-// express import is used as type
-// eslint-disable-next-line node/no-extraneous-import
 import { Response } from "express";
 import { FileInterceptor } from "@nestjs/platform-express";
 import {
