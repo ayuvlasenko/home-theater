@@ -9,6 +9,7 @@ import { UserService } from "../user/user.service";
 import { TokenService } from "../token/token.service";
 import { RegisterUserDto } from "./dto/register-user.dto";
 import { JwtPayload } from "./jwt/jwt.strategy";
+import { UserAgent } from "../common/http-header/parse-user-agent-header";
 
 export interface AuthenticationTokens {
     access: string;
@@ -43,7 +44,7 @@ export class AuthenticationService {
 
     async register(
         registerUserDto: RegisterUserDto,
-        deviceType: string
+        userAgent: UserAgent
     ): Promise<AuthenticationTokens> {
         const user = await this.userService.create({
             login: registerUserDto.login,
@@ -53,23 +54,20 @@ export class AuthenticationService {
 
         return await this.issueTokens({
             userId: user.id,
-            deviceType,
+            userAgent,
         });
     }
 
     async login(options: {
         userId: string;
-        deviceType: string;
+        userAgent: UserAgent;
     }): Promise<AuthenticationTokens> {
-        return await this.issueTokens({
-            userId: options.userId,
-            deviceType: options.deviceType,
-        });
+        return await this.issueTokens(options);
     }
 
     async refreshTokens(options: {
         refreshToken: string;
-        deviceType: string;
+        userAgent: UserAgent;
     }): Promise<AuthenticationTokens> {
         const payload = await this.jwtRefreshTokenService.verifyAsync<JwtPayload>(
             options.refreshToken
@@ -77,7 +75,7 @@ export class AuthenticationService {
 
         const existingToken = await this.tokenService.findLast({
             userId: payload.sub,
-            type: options.deviceType,
+            type: options.userAgent,
         });
 
         const isMatch = await bcrypt.compare(
@@ -90,13 +88,13 @@ export class AuthenticationService {
 
         return await this.issueTokens({
             userId: payload.sub,
-            deviceType: options.deviceType,
+            userAgent: options.userAgent,
         });
     }
 
     private async issueTokens(options: {
         userId: string;
-        deviceType: string;
+        userAgent: UserAgent;
     }): Promise<AuthenticationTokens> {
         const payload: JwtPayload = { sub: options.userId };
 
@@ -107,7 +105,7 @@ export class AuthenticationService {
 
         await this.tokenService.create({
             userId: options.userId,
-            type: options.deviceType,
+            type: options.userAgent,
             value: await hash(tokens.refresh),
         });
 

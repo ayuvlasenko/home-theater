@@ -14,6 +14,10 @@ import {
 import { CookieService } from "../../cookie/cookie.service";
 import { setResponseCookies } from "../../cookie/set-response-cookies";
 import { IS_PUBLIC_KEY } from "../decorator/public.decorator";
+import {
+    parseUserAgentHeader,
+    UserAgent,
+} from "../../common/http-header/parse-user-agent-header";
 
 @Injectable()
 export class JwtGuard extends AuthGuard("jwt") {
@@ -40,7 +44,8 @@ export class JwtGuard extends AuthGuard("jwt") {
 
         const parentCanActivate = await this.tryParentCanActivate(context);
         if ( !parentCanActivate ) {
-            const tokens = await this.tryRefreshTokens(request, "desktop");
+            const userAgent = parseUserAgentHeader(request.headers["user-agent"]);
+            const tokens = await this.tryRefreshTokens(request, userAgent);
             setBearerToken(request, tokens.access);
 
             const response = context.switchToHttp().getResponse<Response>();
@@ -92,7 +97,7 @@ export class JwtGuard extends AuthGuard("jwt") {
 
     private async tryRefreshTokens(
         request: Request,
-        deviceType: string
+        userAgent: UserAgent
     ): Promise<AuthenticationTokens> {
         const refreshToken = this.extractRefreshToken(request);
 
@@ -103,7 +108,7 @@ export class JwtGuard extends AuthGuard("jwt") {
         try {
             return await this.authenticationService.refreshTokens({
                 refreshToken,
-                deviceType,
+                userAgent,
             });
         }
         catch {
