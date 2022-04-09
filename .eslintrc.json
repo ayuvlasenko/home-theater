@@ -102,6 +102,8 @@
       "named": "never",
       "asyncArrow": "always"
     }],
+    "no-empty-function": "off",
+    "@typescript-eslint/no-empty-function": ["warn"],
     "no-promise-executor-return": "error",
     "array-bracket-spacing": ["error", "never"],
     "curly": ["error", "all"],
