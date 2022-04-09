@@ -1,11 +1,10 @@
 import {
     Body,
-    ClassSerializerInterceptor,
     Controller,
+    Get,
     Post,
     Res,
     UseGuards,
-    UseInterceptors,
 } from "@nestjs/common";
 import { Response } from "express";
 import { AuthenticationService, AuthenticationTokens } from "./authentication.service";
@@ -19,7 +18,6 @@ import { LocalGuard } from "./local/local.guard";
 import { RegisterUserDto } from "./dto/register-user.dto";
 
 @Controller("authentication")
-@UseInterceptors(ClassSerializerInterceptor)
 export class AuthenticationController {
     constructor(
         private readonly authenticationService: AuthenticationService,
@@ -55,6 +53,12 @@ export class AuthenticationController {
         );
 
         this.setTokenCookies(response, tokens);
+    }
+
+    @Get("refresh")
+    refresh(): void {
+        console.log("refresh call");
+        // no need to do anything, because jwt.guard do all job
     }
 
     private setTokenCookies(response: Response, tokens: AuthenticationTokens): void {
