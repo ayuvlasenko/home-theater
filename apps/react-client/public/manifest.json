@@ -1,0 +1,6 @@
+{
+  "short_name": "Home Theater",
+  "name": "Home Theater",
+  "start_url": ".",
+  "display": "standalone"
+}
