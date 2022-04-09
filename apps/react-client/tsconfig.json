@@ -18,7 +18,6 @@
     "noImplicitAny": true,
     "strictBindCallApply": true,
     "noUnusedParameters": true,
-    "noImplicitReturns": true,
     "noUncheckedIndexedAccess": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
