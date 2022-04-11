@@ -7,7 +7,7 @@ import {
 import { JwtService } from "@nestjs/jwt";
 import { UserService } from "../user/user.service";
 import { TokenService } from "../token/token.service";
-import { RegisterUserDto } from "./dto/register-user.dto";
+import { SignUpDto } from "./dto/sign-up.dto";
 import { JwtPayload } from "./jwt/jwt.strategy";
 import { UserAgent } from "../common/http-header/parse-user-agent-header";
 
@@ -42,14 +42,14 @@ export class AuthService {
         return user.id;
     }
 
-    async register(
-        registerUserDto: RegisterUserDto,
+    async singUp(
+        signUpDto: SignUpDto,
         userAgent: UserAgent
     ): Promise<AuthTokens> {
         const user = await this.userService.create({
-            login: registerUserDto.login,
-            name: registerUserDto.name,
-            passwordHash: await hash(registerUserDto.password),
+            login: signUpDto.login,
+            name: signUpDto.name,
+            passwordHash: await hash(signUpDto.password),
         });
 
         return await this.issueTokens({
@@ -58,7 +58,7 @@ export class AuthService {
         });
     }
 
-    async login(options: {
+    async signIn(options: {
         userId: string;
         userAgent: UserAgent;
     }): Promise<AuthTokens> {

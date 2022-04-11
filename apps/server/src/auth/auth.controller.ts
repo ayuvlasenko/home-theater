@@ -15,24 +15,24 @@ import { UserAgent as UserAgentDecorator } from "./decorator/user-agent.decorato
 import { UserAgent } from "../common/http-header/parse-user-agent-header";
 import { Public } from "./decorator/public.decorator";
 import { LocalGuard } from "./local/local.guard";
-import { RegisterUserDto } from "./dto/register-user.dto";
+import { SignUpDto } from "./dto/sign-up.dto";
 
-@Controller("authentication")
+@Controller("auth")
 export class AuthController {
     constructor(
         private readonly authService: AuthService,
         private readonly cookieService: CookieService
     ) {}
 
-    @Post("login")
+    @Post("sign-in")
     @Public()
     @UseGuards(LocalGuard)
-    async login(
+    async singIn(
         @Credentials("userId") userId: string,
         @UserAgentDecorator() userAgent: UserAgent,
         @Res({ passthrough: true }) response: Response
     ): Promise<void> {
-        const tokens = await this.authService.login({
+        const tokens = await this.authService.signIn({
             userId,
             userAgent,
         });
@@ -40,15 +40,15 @@ export class AuthController {
         this.setTokenCookies(response, tokens);
     }
 
-    @Post("register")
+    @Post("sign-up")
     @Public()
-    async register(
-        @Body() registerUserDto: RegisterUserDto,
+    async signUp(
+        @Body() signUpDto: SignUpDto,
         @UserAgentDecorator() userAgent: UserAgent,
         @Res({ passthrough: true }) response: Response
     ): Promise<void> {
-        const tokens = await this.authService.register(
-            registerUserDto,
+        const tokens = await this.authService.singUp(
+            signUpDto,
             userAgent
         );
 
