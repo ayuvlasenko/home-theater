@@ -7,7 +7,7 @@ import {
     UseGuards,
 } from "@nestjs/common";
 import { Response } from "express";
-import { AuthenticationService, AuthenticationTokens } from "./authentication.service";
+import { AuthService, AuthTokens } from "./auth.service";
 import { CookieService } from "../cookie/cookie.service";
 import { setResponseCookies } from "../cookie/set-response-cookies";
 import { Credentials } from "./decorator/credentials.decorator";
@@ -18,9 +18,9 @@ import { LocalGuard } from "./local/local.guard";
 import { RegisterUserDto } from "./dto/register-user.dto";
 
 @Controller("authentication")
-export class AuthenticationController {
+export class AuthController {
     constructor(
-        private readonly authenticationService: AuthenticationService,
+        private readonly authService: AuthService,
         private readonly cookieService: CookieService
     ) {}
 
@@ -32,7 +32,7 @@ export class AuthenticationController {
         @UserAgentDecorator() userAgent: UserAgent,
         @Res({ passthrough: true }) response: Response
     ): Promise<void> {
-        const tokens = await this.authenticationService.login({
+        const tokens = await this.authService.login({
             userId,
             userAgent,
         });
@@ -47,7 +47,7 @@ export class AuthenticationController {
         @UserAgentDecorator() userAgent: UserAgent,
         @Res({ passthrough: true }) response: Response
     ): Promise<void> {
-        const tokens = await this.authenticationService.register(
+        const tokens = await this.authService.register(
             registerUserDto,
             userAgent
         );
@@ -61,7 +61,7 @@ export class AuthenticationController {
         // no need to do anything, because jwt.guard do all job
     }
 
-    private setTokenCookies(response: Response, tokens: AuthenticationTokens): void {
+    private setTokenCookies(response: Response, tokens: AuthTokens): void {
         const cookies = this.cookieService.buildByTokens(tokens);
         setResponseCookies(response, cookies);
     }

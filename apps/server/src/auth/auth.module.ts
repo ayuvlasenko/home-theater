@@ -6,8 +6,8 @@ import { TokenModule } from "../token/token.module";
 import { CookieModule } from "../cookie/cookie.module";
 import { JwtRefreshTokenModule } from "./jwt/jwt-refresh-token.module";
 import { JwtAccessTokenModule } from "./jwt/jwt-access-token.module";
-import { AuthenticationService } from "./authentication.service";
-import { AuthenticationController } from "./authentication.controller";
+import { AuthService } from "./auth.service";
+import { AuthController } from "./auth.controller";
 import { LocalStrategy } from "./local/local.strategy";
 import { JwtStrategy } from "./jwt/jwt.strategy";
 
@@ -23,8 +23,8 @@ import { JwtStrategy } from "./jwt/jwt.strategy";
         JwtRefreshTokenModule,
         JwtAccessTokenModule,
     ],
-    controllers: [AuthenticationController],
-    providers: [AuthenticationService, LocalStrategy, JwtStrategy],
-    exports: [AuthenticationService],
+    controllers: [AuthController],
+    providers: [AuthService, LocalStrategy, JwtStrategy],
+    exports: [AuthService],
 })
-export class AuthenticationModule {}
+export class AuthModule {}

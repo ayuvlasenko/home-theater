@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { AuthenticationTokens } from "../authentication/authentication.service";
+import { AuthTokens } from "../auth/auth.service";
 
 export interface Cookie {
     readonly name: string;
@@ -25,7 +25,7 @@ export class CookieService {
         this.refreshTokenMaxAgeMs = configService.get("JWT_REFRESH_TOKEN_EXPIRES_IN_MS") as number;
     }
 
-    buildByTokens(tokens: AuthenticationTokens): Cookie[] {
+    buildByTokens(tokens: AuthTokens): Cookie[] {
         const cookies: Cookie[] = [];
 
         cookies.push({

@@ -11,13 +11,13 @@ import { RegisterUserDto } from "./dto/register-user.dto";
 import { JwtPayload } from "./jwt/jwt.strategy";
 import { UserAgent } from "../common/http-header/parse-user-agent-header";
 
-export interface AuthenticationTokens {
+export interface AuthTokens {
     access: string;
     refresh: string;
 }
 
 @Injectable()
-export class AuthenticationService {
+export class AuthService {
     constructor(
         private readonly userService: UserService,
         private readonly tokenService: TokenService,
@@ -45,7 +45,7 @@ export class AuthenticationService {
     async register(
         registerUserDto: RegisterUserDto,
         userAgent: UserAgent
-    ): Promise<AuthenticationTokens> {
+    ): Promise<AuthTokens> {
         const user = await this.userService.create({
             login: registerUserDto.login,
             name: registerUserDto.name,
@@ -61,14 +61,14 @@ export class AuthenticationService {
     async login(options: {
         userId: string;
         userAgent: UserAgent;
-    }): Promise<AuthenticationTokens> {
+    }): Promise<AuthTokens> {
         return await this.issueTokens(options);
     }
 
     async refreshTokens(options: {
         refreshToken: string;
         userAgent: UserAgent;
-    }): Promise<AuthenticationTokens> {
+    }): Promise<AuthTokens> {
         const payload = await this.jwtRefreshTokenService.verifyAsync<JwtPayload>(
             options.refreshToken
         );
@@ -95,10 +95,10 @@ export class AuthenticationService {
     private async issueTokens(options: {
         userId: string;
         userAgent: UserAgent;
-    }): Promise<AuthenticationTokens> {
+    }): Promise<AuthTokens> {
         const payload: JwtPayload = { sub: options.userId };
 
-        const tokens: AuthenticationTokens = {
+        const tokens: AuthTokens = {
             access: await this.jwtAccessTokenService.signAsync(payload),
             refresh: await this.jwtRefreshTokenService.signAsync(payload),
         };

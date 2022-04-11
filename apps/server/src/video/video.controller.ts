@@ -24,7 +24,7 @@ import {
 import { VideoService } from "./video.service";
 import { UploadVideoDto } from "./dto/upload-video.dto";
 import { Video } from "./video.entity";
-import { Public } from "../authentication/decorator/public.decorator";
+import { Public } from "../auth/decorator/public.decorator";
 
 @Controller("videos")
 @UseInterceptors(ClassSerializerInterceptor)

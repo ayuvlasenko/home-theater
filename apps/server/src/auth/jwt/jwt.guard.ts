@@ -8,9 +8,9 @@ import { Request, Response } from "express";
 import { AuthGuard } from "@nestjs/passport";
 import { ConfigService } from "@nestjs/config";
 import {
-    AuthenticationService,
-    AuthenticationTokens,
-} from "../authentication.service";
+    AuthService,
+    AuthTokens,
+} from "../auth.service";
 import { CookieService } from "../../cookie/cookie.service";
 import { setResponseCookies } from "../../cookie/set-response-cookies";
 import { IS_PUBLIC_KEY } from "../decorator/public.decorator";
@@ -23,7 +23,7 @@ import {
 export class JwtGuard extends AuthGuard("jwt") {
     constructor(
         private readonly reflector: Reflector,
-        private readonly authenticationService: AuthenticationService,
+        private readonly authService: AuthService,
         private readonly cookieService: CookieService,
         private readonly configService: ConfigService
     ) {
@@ -90,7 +90,7 @@ export class JwtGuard extends AuthGuard("jwt") {
             return await (super.canActivate(context) as Promise<boolean>);
         }
         catch {
-            // todo: log authentication error
+            // todo: log auth error
             return false;
         }
     }
@@ -98,7 +98,7 @@ export class JwtGuard extends AuthGuard("jwt") {
     private async tryRefreshTokens(
         request: Request,
         userAgent: UserAgent
-    ): Promise<AuthenticationTokens> {
+    ): Promise<AuthTokens> {
         const refreshToken = this.extractRefreshToken(request);
 
         if ( refreshToken === undefined ) {
@@ -106,7 +106,7 @@ export class JwtGuard extends AuthGuard("jwt") {
         }
 
         try {
-            return await this.authenticationService.refreshTokens({
+            return await this.authService.refreshTokens({
                 refreshToken,
                 userAgent,
             });
