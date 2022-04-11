@@ -1,10 +1,10 @@
-import { useAuthentication } from "../authentication/hook/use-authentication";
+import { useAuth } from "../auth/hook/use-auth";
 import { Loader, NotFound } from "../common/component";
 import { Route, Routes } from "react-router-dom";
-import { Login } from "../authentication/component/login";
+import { Login } from "../auth/component/login";
 
 export function Router(): JSX.Element {
-    const { isAuthenticated, isAuthenticating } = useAuthentication();
+    const { isAuthenticated, isAuthenticating } = useAuth();
 
     if ( isAuthenticating ) {
         return <Loader/>;

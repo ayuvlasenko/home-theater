@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import { AuthenticationContext } from "../authentication.context";
-import { AuthenticationService } from "../authentication.service";
+import { AuthContext } from "../auth.context";
+import { AuthService } from "../auth.service";
 
-export function useAuthentication(): {
+export function useAuth(): {
     isAuthenticating: boolean;
     isAuthenticated: boolean;
 } {
-    const { isAuthenticated, setIsAuthenticated } = useContext(AuthenticationContext);
+    const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
     const [isAuthenticating, setIsAuthenticating] = useState(isAuthenticated === null);
 
     useEffect(() => {
@@ -15,7 +15,7 @@ export function useAuthentication(): {
         }
 
         async function authenticate(): Promise<void> {
-            const authenticationService = new AuthenticationService();
+            const authenticationService = new AuthService();
             const isRefreshed = await authenticationService.tryRefresh();
 
             setIsAuthenticated(isRefreshed);

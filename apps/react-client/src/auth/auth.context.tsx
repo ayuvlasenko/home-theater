@@ -12,7 +12,7 @@ type SetIsAuthenticated = Dispatch<SetStateAction<IsAuthenticated>>;
 const initialIsAuthenticated = null as IsAuthenticated;
 const initialSetIsAuthenticated: SetIsAuthenticated = () => initialIsAuthenticated;
 
-export const AuthenticationContext = createContext({
+export const AuthContext = createContext({
     isAuthenticated: initialIsAuthenticated,
     setIsAuthenticated: initialSetIsAuthenticated,
 });
@@ -23,8 +23,8 @@ export function AuthenticationProvider(
     const [isAuthenticated, setIsAuthenticated] = useState<IsAuthenticated>(null);
 
     return (
-        <AuthenticationContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
             {children}
-        </AuthenticationContext.Provider>
+        </AuthContext.Provider>
     );
 }

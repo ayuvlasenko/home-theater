@@ -1,4 +1,4 @@
-export class AuthenticationService {
+export class AuthService {
     async login(options: {
         login: string;
         password: string;

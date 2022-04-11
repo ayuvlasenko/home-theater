@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import {
     AuthenticationProvider,
-} from "./authentication/authentication.context";
+} from "./auth/auth.context";
 import { BrowserRouter } from "react-router-dom";
 import { Router } from "./router/router";
 import reportWebVitals from "./reportWebVitals";

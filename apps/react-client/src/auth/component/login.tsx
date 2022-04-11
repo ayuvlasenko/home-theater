@@ -1,14 +1,14 @@
 import { ChangeEventHandler, useContext, useState } from "react";
-import { AuthenticationService } from "../authentication.service";
-import { AuthenticationContext } from "../authentication.context";
+import { AuthService } from "../auth.service";
+import { AuthContext } from "../auth.context";
 
 export function Login(): JSX.Element {
-    const { isAuthenticated, setIsAuthenticated } = useContext(AuthenticationContext);
+    const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
     const [authData, setAuthData] = useState({
         login: "aleksandr",
         password: "somesome",
     });
-    const authenticationService = new AuthenticationService();
+    const authService = new AuthService();
 
     const handleLoginChange: ChangeEventHandler<HTMLInputElement> = (e) => {
         setAuthData({
@@ -24,7 +24,7 @@ export function Login(): JSX.Element {
     };
 
     const login = async () => {
-        await authenticationService.login(authData);
+        await authService.login(authData);
         setIsAuthenticated(null);
     };
     const handleLoginClick = () => void login();
