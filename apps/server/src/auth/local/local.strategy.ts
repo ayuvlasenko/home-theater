@@ -17,6 +17,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     }
 
     async validate(login: string, password: string): Promise<Credentials> {
+        // todo: catch user not found exception
         const userId = await this.authService.validateUser(
             login,
             password
