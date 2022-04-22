@@ -57,7 +57,6 @@ export class AuthController {
 
     @Get("refresh")
     refresh(): void {
-        console.log("refresh call");
         // no need to do anything, because jwt.guard do all job
     }
 

@@ -2,28 +2,52 @@ import {
     useState,
     createContext,
     ReactNode,
-    Dispatch,
-    SetStateAction,
 } from "react";
+import * as AuthService from "./auth.service";
 
-type IsAuthenticated = boolean | null;
-type SetIsAuthenticated = Dispatch<SetStateAction<IsAuthenticated>>;
+export interface AuthContextType {
+    isAuthenticated: boolean | null;
+    signIn: (options: { login: string; password: string }) => void;
+    refresh: () => void;
+    signOut: () => void;
+}
 
-const initialIsAuthenticated = null as IsAuthenticated;
-const initialSetIsAuthenticated: SetIsAuthenticated = () => initialIsAuthenticated;
-
-export const AuthContext = createContext({
-    isAuthenticated: initialIsAuthenticated,
-    setIsAuthenticated: initialSetIsAuthenticated,
+export const AuthContext = createContext<AuthContextType>({
+    isAuthenticated: null,
+    signIn: () => {},
+    refresh: () => {},
+    signOut: () => {},
 });
 
 export function AuthenticationProvider(
     { children }: { children: ReactNode }
 ): JSX.Element {
-    const [isAuthenticated, setIsAuthenticated] = useState<IsAuthenticated>(null);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+    async function signIn(options: {
+        login: string;
+        password: string;
+    }): Promise<void> {
+        const isSignedIn = await AuthService.signIn(options);
+        setIsAuthenticated(isSignedIn);
+    }
+
+    async function refresh(): Promise<void> {
+        const isRefreshed = await AuthService.refresh();
+        setIsAuthenticated(isRefreshed);
+    }
+
+    function signOut(): void {
+        setIsAuthenticated(false);
+    }
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+        <AuthContext.Provider value={{
+            isAuthenticated,
+            signIn: (options) => void signIn(options),
+            refresh: () => void refresh(),
+            signOut,
+        }}>
             {children}
         </AuthContext.Provider>
     );

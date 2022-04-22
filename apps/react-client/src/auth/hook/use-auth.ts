@@ -1,29 +1,16 @@
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../auth.context";
-import { AuthService } from "../auth.service";
+import { useContext, useEffect } from "react";
+import { AuthContext, AuthContextType } from "../auth.context";
 
-export function useAuth(): {
-    isAuthenticating: boolean;
-    isAuthenticated: boolean;
-} {
-    const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
-    const [isAuthenticating, setIsAuthenticating] = useState(isAuthenticated === null);
+export function useAuth(): Omit<AuthContextType, "refresh"> {
+    const { isAuthenticated, signIn, signOut, refresh } = useContext(AuthContext);
 
     useEffect(() => {
         if ( isAuthenticated !== null ) {
             return;
         }
 
-        async function authenticate(): Promise<void> {
-            const authenticationService = new AuthService();
-            const isRefreshed = await authenticationService.tryRefresh();
+        refresh();
+    }, [isAuthenticated, refresh]);
 
-            setIsAuthenticated(isRefreshed);
-            setIsAuthenticating(false);
-        }
-
-        void authenticate();
-    }, [isAuthenticated, setIsAuthenticated]);
-
-    return { isAuthenticating, isAuthenticated: isAuthenticated ?? false };
+    return { isAuthenticated, signIn, signOut };
 }

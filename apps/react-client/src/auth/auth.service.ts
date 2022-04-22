@@ -1,27 +1,20 @@
-export class AuthService {
-    async login(options: {
-        login: string;
-        password: string;
-    }): Promise<void> {
-        await fetch("/api/authentication/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                login: options.login,
-                password: options.password,
-            }),
-        });
-    }
+export async function signIn(options: {
+    login: string;
+    password: string;
+}): Promise<boolean> {
+    const response = await fetch("/api/auth/sign-in", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            login: options.login,
+            password: options.password,
+        }),
+    });
 
-    async tryRefresh(): Promise<boolean> {
-        try {
-            const response = await fetch("/api/authentication/refresh");
-            return response.status === 200;
-        }
-        catch (e) {
-            console.log(e);
-        }
+    return response.status === 201;
+}
 
-        return false;
-    }
+export async function refresh(): Promise<boolean> {
+    const response = await fetch("/api/auth/refresh");
+    return response.status === 200;
 }
