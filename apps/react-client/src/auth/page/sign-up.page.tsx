@@ -1,21 +1,28 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useAuth, useFromPath } from "../hook";
+import { useAuth } from "../hook";
 import { Form, PasswordInput, TextInput } from "../../common/component";
 import { BackOnAuth } from "../component";
 
-export function SignInPage(): JSX.Element {
-    const { signIn } = useAuth();
-    const fromPath = useFromPath("/");
+export function SignUpPage(): JSX.Element {
+    const { signUp } = useAuth();
+    const [name, setName] = useState("");
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
 
     return (
         <BackOnAuth>
-            <Form submitInputValue={"sign in"} onSubmit={(e) => {
+            <Form submitInputValue={"sign up"} onSubmit={(e) => {
                 e.preventDefault();
-                signIn({ login, password });
+                signUp({ name, login, password });
             }}>
+                <TextInput
+                    id={"name"}
+                    label={"Name"}
+                    value={name}
+                    onChange={(e) => {
+                        setName(e.target.value);
+                    }}
+                />
                 <TextInput
                     id={"login"}
                     label={"Login"}
@@ -33,7 +40,6 @@ export function SignInPage(): JSX.Element {
                     }}
                 />
             </Form>
-            <Link to={"/sign-up"} state={{ from: fromPath }}>Sign up</Link>
         </BackOnAuth>
     );
 }

@@ -1,9 +1,10 @@
-import { useAuth } from "../hook/use-auth";
+import { ReactNode } from "react";
+import { useAuth } from "../hook";
 import { Navigate, useLocation } from "react-router-dom";
 import { Loader } from "../../common/component";
 
 export function RequireAuth(
-    { children }: { children: JSX.Element }
+    { children }: { children: ReactNode }
 ): JSX.Element {
     const { isAuthenticated } = useAuth();
     const location = useLocation();
@@ -13,8 +14,8 @@ export function RequireAuth(
     }
 
     if ( !isAuthenticated ) {
-        return <Navigate to="/sign-in" state={{ from: location }} replace />;
+        return <Navigate to="/sign-in" state={{ from: location.pathname }} replace/>;
     }
 
-    return children;
+    return <>{ children }</>;
 }
