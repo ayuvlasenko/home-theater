@@ -1,10 +1,7 @@
-import { ReactNode } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { useAuth, useFromPath } from "../hook";
 
-export function BackOnAuth(
-    { children }: { children: ReactNode }
-): JSX.Element {
+export function BackOnAuth(): JSX.Element {
     const fromPath = useFromPath("/");
     const { isAuthenticated } = useAuth();
 
@@ -12,5 +9,5 @@ export function BackOnAuth(
         return <Navigate to={fromPath} replace/>;
     }
 
-    return <>{children}</>;
+    return <Outlet/>;
 }
