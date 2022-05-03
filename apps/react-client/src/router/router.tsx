@@ -7,11 +7,9 @@ export function Router(): JSX.Element {
     // todo: replace path names with variables
     return (
         <Routes>
-            <Route path="*" element={
-                <RequireAuth>
-                    <NotFound/>
-                </RequireAuth>
-            }/>
+            <Route element={<RequireAuth/>}>
+                <Route path="*" element={<NotFound/>}/>
+            </Route>
             <Route path="sign-in" element={<SignInPage/>}/>
             <Route path="sign-up" element={<SignUpPage/>}/>
         </Routes>

@@ -1,11 +1,8 @@
-import { ReactNode } from "react";
-import { useAuth } from "../hook";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { Loader } from "../../common/component";
+import { useAuth } from "../hook";
 
-export function RequireAuth(
-    { children }: { children: ReactNode }
-): JSX.Element {
+export function RequireAuth(): JSX.Element {
     const { isAuthenticated } = useAuth();
     const location = useLocation();
 
@@ -17,5 +14,5 @@ export function RequireAuth(
         return <Navigate to="/sign-in" state={{ from: location.pathname }} replace/>;
     }
 
-    return <>{ children }</>;
+    return <Outlet/>;
 }
