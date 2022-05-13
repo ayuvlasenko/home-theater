@@ -74,6 +74,13 @@ export class VideoController {
         return await this.videoService.findAll();
     }
 
+    @Get(":id")
+    async find(
+        @Param("id") id: string
+    ): Promise<Video> {
+        return await this.videoService.findOne(id);
+    }
+
     @Post()
     @UseInterceptors(FileInterceptor("file"))
     async upload(
