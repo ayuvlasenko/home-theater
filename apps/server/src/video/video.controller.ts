@@ -25,12 +25,16 @@ import { VideoService } from "./video.service";
 import { UploadVideoDto } from "./dto/upload-video.dto";
 import { Video } from "./video.entity";
 import { Public } from "../auth/decorator/public.decorator";
+import { Credentials } from "../auth/decorator/credentials.decorator";
+import { WatchHistoryService } from "../watch-history/watch-history.service";
+import { CreateWatchHistoryDto } from "../watch-history/dto/create-watch-history.dto";
 
 @Controller("videos")
 @UseInterceptors(ClassSerializerInterceptor)
 export class VideoController {
     constructor(
-        private readonly videoService: VideoService
+        private readonly videoService: VideoService,
+        private readonly watchHistoryService: WatchHistoryService
     ) {}
 
     @Get(":id/stream")
@@ -84,6 +88,19 @@ export class VideoController {
                 name: file.filename,
                 originalName: file.originalname,
             },
+        });
+    }
+
+    @Post(":id/watch-history")
+    async createOrUpdateWatchHistory(
+        @Param("id") id: string,
+        @Credentials("userId") userId: string,
+        @Body() createWatchHistoryDto: CreateWatchHistoryDto
+    ): Promise<void> {
+        await this.watchHistoryService.createOrUpdate({
+            userId,
+            videoId: id,
+            currentTimeSeconds: createWatchHistoryDto.currentTimeSeconds,
         });
     }
 }
