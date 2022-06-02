@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { BackOnAuth, RequireAuth } from "../auth/component";
 import { NotFound } from "../common/component";
 import { SignInPage, SignUpPage } from "../auth/page";
+import { VideoPage, VideosPage } from "../video/page";
 
 export function Router(): JSX.Element {
     // todo: replace path names with variables
@@ -9,6 +10,8 @@ export function Router(): JSX.Element {
         <Routes>
             <Route element={<RequireAuth/>}>
                 <Route path="*" element={<NotFound/>}/>
+                <Route path="videos" element={<VideosPage/>}/>
+                <Route path="videos/:videoId" element={<VideoPage/>}/>
             </Route>
             <Route element={<BackOnAuth/>}>
                 <Route path="sign-in" element={<SignInPage/>}/>
