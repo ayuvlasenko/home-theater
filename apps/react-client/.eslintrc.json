@@ -14,5 +14,8 @@
   "parserOptions": {
     "project": "tsconfig.json",
     "sourceType": "module"
+  },
+  "rules": {
+    "jsx-a11y/media-has-caption": "warn"
   }
 }

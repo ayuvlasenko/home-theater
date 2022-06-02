@@ -28,6 +28,7 @@ import { Public } from "../auth/decorator/public.decorator";
 import { Credentials } from "../auth/decorator/credentials.decorator";
 import { WatchHistoryService } from "../watch-history/watch-history.service";
 import { CreateWatchHistoryDto } from "../watch-history/dto/create-watch-history.dto";
+import { WatchHistory } from "../watch-history/watch-history.entity";
 
 @Controller("videos")
 @UseInterceptors(ClassSerializerInterceptor)
@@ -109,5 +110,13 @@ export class VideoController {
             videoId: id,
             currentTimeSeconds: createWatchHistoryDto.currentTimeSeconds,
         });
+    }
+
+    @Get(":id/watch-history")
+    async getWatchHistory(
+        @Param("id") id: string,
+        @Credentials("userId") userId: string
+    ): Promise<WatchHistory> {
+        return await this.watchHistoryService.findOne({ userId, videoId: id });
     }
 }

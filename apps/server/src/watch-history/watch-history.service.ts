@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserService } from "../user/user.service";
@@ -41,5 +41,28 @@ export class WatchHistoryService {
         watchHistory.currentTimeSeconds = options.currentTimeSeconds;
 
         await this.watchHistoryRepository.save(watchHistory);
+    }
+
+    async findOne(options: {
+        userId: string;
+        videoId: string;
+    }): Promise<WatchHistory> {
+        const watchHistory = await this.watchHistoryRepository.findOne({
+            relations: ["video", "user"],
+            where: {
+                video: {
+                    id: options.videoId,
+                },
+                user: {
+                    id: options.userId,
+                },
+            },
+        });
+
+        if ( watchHistory === undefined ) {
+            throw new NotFoundException("Watch history not found");
+        }
+
+        return watchHistory;
     }
 }
