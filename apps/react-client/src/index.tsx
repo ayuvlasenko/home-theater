@@ -1,10 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import {
-    AuthenticationProvider,
-} from "./auth/auth.context";
 import { BrowserRouter } from "react-router-dom";
-import { Router } from "./router/router";
+import { Router } from "./router";
+import { AuthProvider } from "./auth";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 
@@ -16,11 +14,11 @@ if ( container === null ) {
 const root = createRoot(container);
 root.render(
     <StrictMode>
-        <AuthenticationProvider>
+        <AuthProvider>
             <BrowserRouter>
                 <Router/>
             </BrowserRouter>
-        </AuthenticationProvider>
+        </AuthProvider>
     </StrictMode>
 );
 

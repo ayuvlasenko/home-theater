@@ -1,10 +1,11 @@
-import { useState, createContext, ReactNode } from "react";
-import * as AuthService from "./auth.service";
+import { createContext, ReactNode, useState } from "react";
+import { SingInOptions, SignUpOptions } from "./service";
+import * as AuthService from "./service";
 
 export interface AuthContextType {
     isAuthenticated: boolean | null;
-    signIn: (options: AuthService.SingInOptions) => void;
-    signUp: (options: AuthService.SignUpOptions) => void;
+    signIn: (options: SingInOptions) => void;
+    signUp: (options: SignUpOptions) => void;
     refresh: () => void;
     signOut: () => void;
 }
@@ -17,7 +18,7 @@ export const AuthContext = createContext<AuthContextType>({
     signOut: () => {},
 });
 
-export function AuthenticationProvider(
+export function AuthProvider(
     { children }: { children: ReactNode }
 ): JSX.Element {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
