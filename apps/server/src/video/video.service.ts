@@ -7,6 +7,7 @@ import { ConfigService } from "@nestjs/config";
 import { FileService } from "../file";
 import { Video } from "./entity";
 import { CreateVideoDto } from "./dto";
+import { EnvValidationSchema } from "../config";
 
 export interface VideoStream {
     readStream: ReadStream;
@@ -25,11 +26,11 @@ export class VideoService {
 
     constructor(
         private readonly fileService: FileService,
-        private readonly configService: ConfigService,
+        private readonly configService: ConfigService<EnvValidationSchema, true>,
         @InjectRepository(Video)
         private readonly videoRepository: Repository<Video>
     ) {
-        this.maxChunkBytes = this.configService.get("MAX_VIDEO_CHUNK_BYTES") ?? 500000;
+        this.maxChunkBytes = this.configService.get("MAX_VIDEO_CHUNK_BYTES", { infer: true });
     }
 
     async create(createVideoDto: CreateVideoDto): Promise<Video> {

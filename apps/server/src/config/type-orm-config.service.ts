@@ -1,20 +1,23 @@
 import { Injectable } from "@nestjs/common";
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from "@nestjs/typeorm";
 import { ConfigService } from "@nestjs/config";
+import { EnvValidationSchema } from "./env-validation-schema";
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
-    constructor(private readonly configService: ConfigService) {}
+    constructor(
+        private readonly configService: ConfigService<EnvValidationSchema, true>
+    ) {}
 
     createTypeOrmOptions(): Promise<TypeOrmModuleOptions> | TypeOrmModuleOptions {
         return {
             type: "postgres",
-            host: this.configService.get("TYPEORM_HOST") as string,
-            port: +this.configService.get("TYPEORM_PORT"),
-            username: this.configService.get("TYPEORM_USERNAME") as string,
-            password: this.configService.get("TYPEORM_PASSWORD") as string,
-            database: this.configService.get("TYPEORM_DATABASE") as string,
-            cache: this.configService.get("TYPEORM_CACHE") === "TRUE",
+            host: this.configService.get("TYPEORM_HOST", { infer: true }),
+            port: this.configService.get("TYPEORM_PORT", { infer: true }),
+            username: this.configService.get("TYPEORM_USERNAME", { infer: true }),
+            password: this.configService.get("TYPEORM_PASSWORD", { infer: true }),
+            database: this.configService.get("TYPEORM_DATABASE", { infer: true }),
+            cache: this.configService.get("TYPEORM_CACHE", { infer: true }) === "TRUE",
             autoLoadEntities: true,
         };
     }

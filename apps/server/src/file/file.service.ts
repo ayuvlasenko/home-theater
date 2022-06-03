@@ -8,6 +8,7 @@ import { Cache } from "cache-manager";
 import { ConfigService } from "@nestjs/config";
 import { File } from "./entity";
 import { CreateFileDto } from "./dto";
+import { EnvValidationSchema } from "../config";
 
 interface FileStats {
     size: number;
@@ -23,13 +24,13 @@ export class FileService {
     private readonly filesDirectory: string;
 
     constructor(
-        private readonly configService: ConfigService,
+        private readonly configService: ConfigService<EnvValidationSchema, true>,
         @InjectRepository(File)
         private readonly fileRepository: Repository<File>,
         @Inject(CACHE_MANAGER)
         private readonly cacheManager: Cache
     ) {
-        this.filesDirectory = this.configService.get("FILES_DIRECTORY") as string;
+        this.filesDirectory = this.configService.get("FILES_DIRECTORY", { infer: true });
     }
 
     async create(createFileDto: CreateFileDto): Promise<File> {

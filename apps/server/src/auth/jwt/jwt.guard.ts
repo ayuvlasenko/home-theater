@@ -7,6 +7,7 @@ import { AuthService, AuthTokens } from "../auth.service";
 import { CookieService, setResponseCookies } from "../../cookie";
 import { IS_PUBLIC_KEY } from "../decorator";
 import { parseUserAgentHeader, UserAgent } from "../../common/http-header";
+import { EnvValidationSchema } from "../../config";
 
 @Injectable()
 export class JwtGuard extends AuthGuard("jwt") {
@@ -14,7 +15,7 @@ export class JwtGuard extends AuthGuard("jwt") {
         private readonly reflector: Reflector,
         private readonly authService: AuthService,
         private readonly cookieService: CookieService,
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService<EnvValidationSchema, true>
     ) {
         super();
     }
@@ -68,7 +69,7 @@ export class JwtGuard extends AuthGuard("jwt") {
     private extractAccessToken(request: Request): string | undefined {
         return extractRequestCookie(
             request,
-            this.configService.get("ACCESS_TOKEN_COOKIE") as string
+            this.configService.get("ACCESS_TOKEN_COOKIE", { infer: true })
         );
     }
 
@@ -109,7 +110,7 @@ export class JwtGuard extends AuthGuard("jwt") {
     private extractRefreshToken(request: Request): string | undefined {
         return extractRequestCookie(
             request,
-            this.configService.get("REFRESH_TOKEN_COOKIE") as string
+            this.configService.get("REFRESH_TOKEN_COOKIE", { infer: true })
         );
     }
 

@@ -3,6 +3,7 @@ import { ConfigService } from "@nestjs/config";
 import { ValidationPipe } from "@nestjs/common";
 import cookieParser from "cookie-parser";
 import { AppModule } from "./app.module";
+import { EnvValidationSchema } from "./config";
 
 async function bootstrap(): Promise<void> {
     const app = await NestFactory.create(AppModule);
@@ -15,8 +16,8 @@ async function bootstrap(): Promise<void> {
 
     app.setGlobalPrefix("api");
 
-    const configService = app.get(ConfigService);
-    const port = configService.get<number | undefined>("APP_PORT") ?? 8080;
+    const configService: ConfigService<EnvValidationSchema, true> = app.get(ConfigService);
+    const port = configService.get("APP_PORT", { infer: true });
 
     await app.listen(port);
 }

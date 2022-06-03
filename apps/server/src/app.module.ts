@@ -6,11 +6,13 @@ import { ServeStaticModule } from "@nestjs/serve-static";
 import { VideoModule } from "./video";
 import { AuthModule } from "./auth";
 import { CookieModule } from "./cookie";
-import { TypeOrmConfigService } from "./config";
+import { envValidationSchema, TypeOrmConfigService } from "./config";
 
 @Module({
     imports: [
-        ConfigModule.forRoot(),
+        ConfigModule.forRoot({
+            validationSchema: envValidationSchema,
+        }),
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
             useClass: TypeOrmConfigService,
