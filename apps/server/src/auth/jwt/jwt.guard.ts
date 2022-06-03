@@ -1,23 +1,12 @@
+import type { Request, Response } from "express";
 import { Reflector } from "@nestjs/core";
-import {
-    ExecutionContext,
-    Injectable,
-    UnauthorizedException,
-} from "@nestjs/common";
-import { Request, Response } from "express";
+import { ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { ConfigService } from "@nestjs/config";
-import {
-    AuthService,
-    AuthTokens,
-} from "../auth.service";
-import { CookieService } from "../../cookie/cookie.service";
-import { setResponseCookies } from "../../cookie/set-response-cookies";
-import { IS_PUBLIC_KEY } from "../decorator/public.decorator";
-import {
-    parseUserAgentHeader,
-    UserAgent,
-} from "../../common/http-header/parse-user-agent-header";
+import { AuthService, AuthTokens } from "../auth.service";
+import { CookieService, setResponseCookies } from "../../cookie";
+import { IS_PUBLIC_KEY } from "../decorator";
+import { parseUserAgentHeader, UserAgent } from "../../common/http-header";
 
 @Injectable()
 export class JwtGuard extends AuthGuard("jwt") {

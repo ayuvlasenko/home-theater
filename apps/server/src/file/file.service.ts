@@ -2,12 +2,12 @@ import { createReadStream, ReadStream, Stats } from "fs";
 import { stat } from "fs/promises";
 import { resolve } from "path";
 import { CACHE_MANAGER, Inject, Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Cache } from "cache-manager";
-import { CreateFileDto } from "./dto/create-file.dto";
-import { File } from "./file.entity";
+import { ConfigService } from "@nestjs/config";
+import { File } from "./entity";
+import { CreateFileDto } from "./dto";
 
 interface FileStats {
     size: number;

@@ -1,4 +1,4 @@
-import { Response } from "express";
+import type { Response } from "express";
 import { Cookie } from "./cookie.service";
 
 export function setResponseCookies(response: Response, cookies: Cookie[]): void {

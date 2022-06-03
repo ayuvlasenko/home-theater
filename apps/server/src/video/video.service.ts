@@ -1,12 +1,12 @@
 import { ReadStream } from "fs";
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import { HttpRange } from "../common/http-header";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Video } from "./video.entity";
-import { HttpRange } from "../common/http-header/parse-range-header";
-import { FileService } from "../file/file.service";
-import { CreateVideoDto } from "./dto/create-video.dto";
+import { ConfigService } from "@nestjs/config";
+import { FileService } from "../file";
+import { Video } from "./entity";
+import { CreateVideoDto } from "./dto";
 
 export interface VideoStream {
     readStream: ReadStream;

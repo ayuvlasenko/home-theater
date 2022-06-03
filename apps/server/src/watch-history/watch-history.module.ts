@@ -1,9 +1,9 @@
 import { forwardRef, Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { WatchHistory } from "./watch-history.entity";
-import { VideoModule } from "../video/video.module";
-import { UserModule } from "../user/user.module";
+import { VideoModule } from "../video";
+import { UserModule } from "../user";
 import { WatchHistoryService } from "./watch-history.service";
+import { WatchHistory } from "./entity";
 
 @Module({
     imports: [

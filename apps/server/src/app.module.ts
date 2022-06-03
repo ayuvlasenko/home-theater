@@ -2,11 +2,11 @@ import { join } from "path";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { TypeOrmConfigService } from "./config/type-orm-config.service";
 import { ServeStaticModule } from "@nestjs/serve-static";
-import { VideoModule } from "./video/video.module";
-import { AuthModule } from "./auth/auth.module";
-import { CookieModule } from "./cookie/cookie.module";
+import { VideoModule } from "./video";
+import { AuthModule } from "./auth";
+import { CookieModule } from "./cookie";
+import { TypeOrmConfigService } from "./config";
 
 @Module({
     imports: [

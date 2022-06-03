@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { AuthTokens } from "../auth/auth.service";
+import { AuthTokens } from "../auth";
 
 export interface Cookie {
     readonly name: string;

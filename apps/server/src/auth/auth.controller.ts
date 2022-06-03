@@ -1,21 +1,12 @@
-import {
-    Body,
-    Controller,
-    Get,
-    Post,
-    Res,
-    UseGuards,
-} from "@nestjs/common";
-import { Response } from "express";
+import type { Response } from "express";
+import { Body, Controller, Get, Post, Res, UseGuards } from "@nestjs/common";
 import { AuthService, AuthTokens } from "./auth.service";
-import { CookieService } from "../cookie/cookie.service";
-import { setResponseCookies } from "../cookie/set-response-cookies";
-import { Credentials } from "./decorator/credentials.decorator";
-import { UserAgent as UserAgentDecorator } from "./decorator/user-agent.decorator";
-import { UserAgent } from "../common/http-header/parse-user-agent-header";
-import { Public } from "./decorator/public.decorator";
-import { LocalGuard } from "./local/local.guard";
-import { SignUpDto } from "./dto/sign-up.dto";
+import { CookieService, setResponseCookies } from "../cookie";
+import { UserAgent } from "../common/http-header";
+import { UserAgent as UserAgentDecorator } from "../common/http-header/decorator";
+import { Public, Credentials } from "./decorator";
+import { LocalGuard } from "./local";
+import { SignUpDto } from "./dto";
 
 @Controller("auth")
 export class AuthController {

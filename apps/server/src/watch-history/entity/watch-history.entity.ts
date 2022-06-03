@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, Unique } from "typeorm";
-import { Base } from "../common/entity/base.entity";
-import { Video } from "../video/video.entity";
-import { User } from "../user/user.entity";
+import { Base } from "../../common/entity";
+import { Video } from "../../video/entity";
+import { User } from "../../user/entity";
 
 @Entity()
 @Unique(["video", "user"])

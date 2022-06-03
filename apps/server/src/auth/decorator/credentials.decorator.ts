@@ -1,5 +1,5 @@
+import type { Request } from "express";
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
-import { Request } from "express";
 
 interface RequestWithCredentials extends Request {
     credentials?: { [property: string]: unknown };

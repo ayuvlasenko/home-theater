@@ -1,34 +1,18 @@
-import { Response } from "express";
+import type { Response } from "express";
 import { FileInterceptor } from "@nestjs/platform-express";
 import {
-    Controller,
-    Get,
-    Param,
-    Res,
-    Headers,
-    HttpStatus,
-    StreamableFile,
-    Post,
-    UseInterceptors,
-    UploadedFile,
-    Body,
-    ClassSerializerInterceptor,
+    Controller, Get, Param, Res, Headers, HttpStatus, StreamableFile, Post,
+    UseInterceptors, UploadedFile, Body, ClassSerializerInterceptor,
 } from "@nestjs/common";
-import {
-    HttpRange,
-    parseRangeHeader,
-} from "../common/http-header/parse-range-header";
-import {
-    RangeNotSatisfiableException,
-} from "../common/http-header/range-not-satisfiable.exception";
+import { HttpRange, parseRangeHeader } from "../common/http-header";
+import { RangeNotSatisfiableException } from "../common/http-header/exception";
+import { Public, Credentials } from "../auth/decorator";
 import { VideoService } from "./video.service";
-import { UploadVideoDto } from "./dto/upload-video.dto";
-import { Video } from "./video.entity";
-import { Public } from "../auth/decorator/public.decorator";
-import { Credentials } from "../auth/decorator/credentials.decorator";
-import { WatchHistoryService } from "../watch-history/watch-history.service";
-import { CreateWatchHistoryDto } from "../watch-history/dto/create-watch-history.dto";
-import { WatchHistory } from "../watch-history/watch-history.entity";
+import { WatchHistoryService } from "../watch-history";
+import { Video } from "./entity";
+import { WatchHistory } from "../watch-history/entity";
+import { UploadVideoDto } from "./dto";
+import { CreateWatchHistoryDto } from "../watch-history/dto";
 
 @Controller("videos")
 @UseInterceptors(ClassSerializerInterceptor)

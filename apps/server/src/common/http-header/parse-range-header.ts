@@ -1,6 +1,4 @@
-import {
-    RangeNotSatisfiableException,
-} from "./range-not-satisfiable.exception";
+import { RangeNotSatisfiableException } from "./exception";
 
 export interface HttpRange {
     start: number;

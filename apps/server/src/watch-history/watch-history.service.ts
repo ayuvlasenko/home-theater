@@ -1,9 +1,14 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+    forwardRef,
+    Inject,
+    Injectable,
+    NotFoundException,
+} from "@nestjs/common";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { UserService } from "../user/user.service";
-import { VideoService } from "../video/video.service";
-import { WatchHistory } from "./watch-history.entity";
+import { UserService } from "../user";
+import { VideoService } from "../video";
+import { WatchHistory } from "./entity";
 
 @Injectable()
 export class WatchHistoryService {
@@ -11,6 +16,7 @@ export class WatchHistoryService {
         @InjectRepository(WatchHistory)
         private readonly watchHistoryRepository: Repository<WatchHistory>,
         private readonly userService: UserService,
+        @Inject(forwardRef(() => VideoService))
         private readonly videoService: VideoService
     ) {}
 

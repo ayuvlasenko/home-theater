@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne } from "typeorm";
-import { Base } from "../common/entity/base.entity";
-import { User } from "../user/user.entity";
+import { Base } from "../../common/entity";
+import { User } from "../../user/entity";
 
 @Entity()
 export class Token extends Base {

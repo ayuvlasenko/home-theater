@@ -2,7 +2,7 @@ import { CacheModule, Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { FileService } from "./file.service";
-import { File } from "./file.entity";
+import { File } from "./entity";
 
 @Module({
     imports: [

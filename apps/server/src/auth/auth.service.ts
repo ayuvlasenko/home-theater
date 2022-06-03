@@ -5,11 +5,11 @@ import {
     JWT_REFRESH_TOKEN_SERVICE,
 } from "../custom-provider.constants";
 import { JwtService } from "@nestjs/jwt";
-import { UserService } from "../user/user.service";
-import { TokenService } from "../token/token.service";
-import { SignUpDto } from "./dto/sign-up.dto";
-import { JwtPayload } from "./jwt/jwt.strategy";
-import { UserAgent } from "../common/http-header/parse-user-agent-header";
+import { UserService } from "../user";
+import { TokenService } from "../token";
+import { UserAgent } from "../common/http-header";
+import { JwtPayload } from "./jwt";
+import { SignUpDto } from "./dto";
 
 export interface AuthTokens {
     access: string;
